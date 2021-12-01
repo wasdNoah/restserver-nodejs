@@ -32,10 +32,17 @@ const usersPost = async (req, res) => {
     const { name, email, password, role } = req.body;
     const user = new User({ name, email, password, role });
 
-    //check if email already exists
-    const salt = bcryptjs.genSaltSync();
-    
+    //email validations
+    const emailExists = await User.findOne({ email });
+
+    if (emailExists) {
+        return res.status(400).json({
+            msg: 'Correo ya existe'
+        })
+    }
+
     //encrypt password
+    const salt = bcryptjs.genSaltSync();
     user.password = bcryptjs.hashSync(password, salt);
 
     //save to database

@@ -1,10 +1,11 @@
 const { response } = require('express');
+const bcryptjs = require('bcryptjs');
 
 const User = require('../models/user');
 
 const usersGet = (req, res = response) => {
 
-    const {q, name = 'No name', apikey, page = 1, limit} = req.query;
+    const { q, name = 'No name', apikey, page = 1, limit } = req.query;
 
     res.json({
         msg: 'get API - controlador',
@@ -26,11 +27,18 @@ const usersPut = (req, res) => {
     });
 }
 
-const usersPost = async(req, res) => {
+const usersPost = async (req, res) => {
 
-    const body = req.body;
-    const user = new User(body);
+    const { name, email, password, role } = req.body;
+    const user = new User({ name, email, password, role });
 
+    //check if email already exists
+    const salt = bcryptjs.genSaltSync();
+    
+    //encrypt password
+    user.password = bcryptjs.hashSync(password, salt);
+
+    //save to database
     await user.save();
 
     res.json({

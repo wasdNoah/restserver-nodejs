@@ -1,6 +1,6 @@
 const { response } = require('express');
 
-const usuariosGet = (req, res = response) => {
+const usersGet = (req, res = response) => {
 
     const {q, nombre = 'No name', apikey, page = 1, limit} = req.query;
 
@@ -14,7 +14,7 @@ const usuariosGet = (req, res = response) => {
     });
 }
 
-const usuariosPut = (req, res) => {
+const usersPut = (req, res) => {
 
     const { id } = req.params;
 
@@ -24,7 +24,7 @@ const usuariosPut = (req, res) => {
     });
 }
 
-const usuariosPost = (req, res) => {
+const usersPost = (req, res) => {
 
     const { nombre, edad } = req.body;
 
@@ -35,22 +35,22 @@ const usuariosPost = (req, res) => {
     });
 }
 
-const usuariosPatch = (req, res) => {
+const usersPatch = (req, res) => {
     res.json({
         msg: 'patch API - controlador'
     });
 }
 
-const usuariosDelete = (req, res) => {
+const usersDelete = (req, res) => {
     res.json({
         msg: 'delete API - controlador'
     });
 }
 
 module.exports = {
-    usuariosGet,
-    usuariosPut,
-    usuariosPost,
-    usuariosPatch,
-    usuariosDelete
+    usersGet,
+    usersPut,
+    usersPost,
+    usersPatch,
+    usersDelete
 }

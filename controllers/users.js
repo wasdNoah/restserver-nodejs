@@ -17,13 +17,22 @@ const usersGet = (req, res = response) => {
     });
 }
 
-const usersPut = (req, res) => {
+const usersPut = async (req, res) => {
 
     const { id } = req.params;
+    const {_id, password, google, email, ...body } = req.body;
 
-    res.status(400).json({
+    if (password) {
+        //encrypt password
+        const salt = bcryptjs.genSaltSync();
+        body.password = bcryptjs.hashSync(password, salt);
+    }
+
+    const user = await User.findByIdAndUpdate(id, body);
+
+    res.json({
         msg: 'put API - controlador',
-        id
+        user
     });
 }
 
@@ -31,15 +40,6 @@ const usersPost = async (req, res) => {
 
     const { name, email, password, role } = req.body;
     const user = new User({ name, email, password, role });
-
-    //email validations
-    const emailExists = await User.findOne({ email });
-
-    if (emailExists) {
-        return res.status(400).json({
-            msg: 'Correo ya existe'
-        })
-    }
 
     //encrypt password
     const salt = bcryptjs.genSaltSync();
